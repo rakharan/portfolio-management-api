@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "lib": ["es5", "es6"],
+    "target": "es2019",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "baseUrl": "./src",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "paths": {
+      "@database/*": ["./database/*"],
+      "@models/*": ["./models/*"],
+      "@routes/*": ["./application/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@routesa/*": ["./routesa/*"],
+      "@services/*": ["./services/*"],
+      "@types/*": ["./types/*"],
+      "@utils/*": ["./utils/*"],
+      "@middleware/*": ["./middleware/*"],
+    },
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*", "src/helpers/Email/template/**/*.handlebars", "migrations/**/*.ts"],
+  "exclude": ["node_modules", "./src/__tests__", "./src/__mocks__"],
+ }
