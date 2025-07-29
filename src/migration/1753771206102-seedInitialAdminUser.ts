@@ -8,7 +8,7 @@ export class SeedInitialAdminUser1753771206102 implements MigrationInterface {
             (
                 1,
                 'admin@wealthtech.com',
-                '$2a$12$XBReFOb7eeatiEkRfY7yce.TA46EdB2Xu7XY8FM8J75SQfcJChFdy',
+                '$2a$12$CLjqBvMF18bM0wuZhVNpLOvxtFjb3iaf7/iHtT0c7amDfbfUuBIiy',
                 'active'
             );
         `);

@@ -36,13 +36,13 @@ export type GetUserPasswordByIdResult = {
 
 export type CheckUserExistResult = {
     id: number
-    name: string
+    first_name: string
+    last_name: string
     email: string
-    password: string
-    level: number
+    password_hash: string
+    group_id: number
     created_at: number
-    is_deleted: number
-    is_verified: number
+    status: string
 }
 
 export type FindUserByTokenResult = {

@@ -8,18 +8,18 @@ export class SeedInitialAssets1753771558126 implements MigrationInterface {
                 (symbol, name, asset_type, sector, currency, current_price, price_updated_at) 
             VALUES
                 -- US Stocks
-                ('AAPL', 'Apple Inc.', 'stock', 'Technology', 'USD', 195.80, NOW()),
-                ('MSFT', 'Microsoft Corporation', 'stock', 'Technology', 'USD', 430.50, NOW()),
-                ('GOOGL', 'Alphabet Inc. Class A', 'stock', 'Technology', 'USD', 177.20, NOW()),
+                ('AAPL', 'Apple Inc.', 'stock', 'Technology', 'USD', 195.80, CURRENT_TIMESTAMP()),
+                ('MSFT', 'Microsoft Corporation', 'stock', 'Technology', 'USD', 430.50, CURRENT_TIMESTAMP()),
+                ('GOOGL', 'Alphabet Inc. Class A', 'stock', 'Technology', 'USD', 177.20, CURRENT_TIMESTAMP()),
                 
                 -- Exchange-Traded Fund (ETF)
-                ('SPY', 'SPDR S&P 500 ETF Trust', 'etf', 'Index', 'USD', 545.60, NOW()),
+                ('SPY', 'SPDR S&P 500 ETF Trust', 'etf', 'Index', 'USD', 545.60, CURRENT_TIMESTAMP()),
                 
                 -- Cryptocurrency
-                ('BTC', 'Bitcoin', 'crypto', 'Cryptocurrency', 'USD', 64150.75, NOW()),
+                ('BTC', 'Bitcoin', 'crypto', 'Cryptocurrency', 'USD', 64150.75, CURRENT_TIMESTAMP()),
                 
                 -- Bond (Example)
-                ('US10Y', 'U.S. 10 Year Treasury Note', 'bond', 'Government', 'USD', 98.50, NOW());
+                ('US10Y', 'U.S. 10 Year Treasury Note', 'bond', 'Government', 'USD', 98.50, CURRENT_TIMESTAMP());
         `);
     }
 

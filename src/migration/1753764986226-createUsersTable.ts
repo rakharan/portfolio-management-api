@@ -10,11 +10,11 @@ export class CreateUsersTable1753764986226 implements MigrationInterface {
                 email VARCHAR(255) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL, -- Storing a hash, not the password
                 status ENUM('active', 'inactive', 'suspended') NOT NULL DEFAULT 'active',
-                last_login TIMESTAMP NULL,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                last_login DATETIME NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (group_id) REFERENCES user_groups(id)
-            )
+            );
         `);
     }
 

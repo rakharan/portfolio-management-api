@@ -12,9 +12,9 @@ export class CreateAssetsTable1753769894824 implements MigrationInterface {
                 sector VARCHAR(100),
                 currency VARCHAR(10) DEFAULT 'USD',
                 current_price DECIMAL(20, 8),
-                price_updated_at TIMESTAMP,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                price_updated_at DATETIME,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )
         `);
     }

@@ -1,4 +1,7 @@
 import fastify from "fastify"
+import FastifyBaseAddon from "@application/boot/fastify/base"
+import FastifyRouteAddon from "@application/boot/fastify/route"
+import FastifySwaggerAddon from "@application/boot/fastify/swagger"
 import Ajv from "ajv"
 import cors from '@fastify/cors'
 import { AppDataSource } from "@infrastructure/mysql/connection"
@@ -41,6 +44,10 @@ function buildServer() {
             console.log({ err })
             console.error("Error during Data Source initialization", err)
         })
+
+    server.register(FastifyBaseAddon)
+    server.register(FastifySwaggerAddon)
+    server.register(FastifyRouteAddon)
 
     return server
 }

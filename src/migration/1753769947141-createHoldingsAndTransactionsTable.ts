@@ -11,7 +11,7 @@ export class CreateHoldingsAndTransactionsTable1753769947141 implements Migratio
                 asset_id INT NOT NULL,
                 quantity DECIMAL(20, 8) NOT NULL,
                 average_cost DECIMAL(20, 8) NOT NULL,
-                last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                last_updated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE,
                 FOREIGN KEY (asset_id) REFERENCES assets(id),
                 UNIQUE KEY unique_portfolio_asset (portfolio_id, asset_id)
@@ -29,9 +29,9 @@ export class CreateHoldingsAndTransactionsTable1753769947141 implements Migratio
                 price DECIMAL(20, 8),
                 amount DECIMAL(15, 2) NOT NULL,
                 fee DECIMAL(15, 2) DEFAULT 0.00,
-                transaction_date TIMESTAMP NOT NULL,
+                transaction_date DATETIME NOT NULL,
                 notes TEXT,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE,
                 FOREIGN KEY (asset_id) REFERENCES assets(id)
             )

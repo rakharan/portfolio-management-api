@@ -1,106 +1,114 @@
-import { AppDataSource } from "@infrastructure/mysql/connection"
-import { QueryRunner } from "typeorm"
-import { UserResponseDto } from "@domain/model/response"
-import { UserParamsDto } from "@domain/model/params"
-import { ResultSetHeader } from "mysql2"
+import { AppDataSource } from "@infrastructure/mysql/connection";
+import { QueryRunner } from "typeorm";
+import { UserResponseDto } from "@domain/model/response";
+import { UserParamsDto } from "@domain/model/params";
+import { ResultSetHeader } from "mysql2";
+import moment from "moment";
 
-const db = AppDataSource
+const db = AppDataSource;
 
 export default class UserRepository {
-    static async DBCreateUser(user: UserParamsDto.RegisterParams, query_runner?: QueryRunner) {
-        const result = await db.query<ResultSetHeader>(`INSERT INTO user (NAME, email, PASSWORD, LEVEL, created_at, email_token) VALUES (?,?,?,?,?,?)`, [user.name, user.email, user.password, user.level, user.created_at, user.email_token], query_runner)
-
-        return result
+    static async DBCreateUser(user: UserParamsDto.RegisterParams, query_runner?: QueryRunner): Promise<ResultSetHeader> {
+        const result = await db.query<ResultSetHeader>(
+            `INSERT INTO users (group_id, email, password_hash, email_verification_token) VALUES (?, ?, ?, ?)`,
+            [user.group_id, user.email, user.password_hash, user.email_verification_token],
+            query_runner
+        );
+        return result;
     }
 
     static async DBGetEmailExist(email: string): Promise<UserResponseDto.GetEmailExistResult[]> {
-        const result = await db.query<UserResponseDto.GetEmailExistResult[]>(
-            `
-            SELECT 
-            u.id
-            FROM user u
-            WHERE u.email = ?
-            AND u.is_deleted <> 1`,
+        const rows = await db.query<UserResponseDto.GetEmailExistResult[]>(
+            `SELECT id FROM users WHERE email = ? AND status = 'active'`,
             [email]
-        )
-        return result
+        );
+        return rows;
     }
 
-    static async DBCheckUserExists(email: string, query_runner?: QueryRunner) {
-        return await db.query<UserResponseDto.CheckUserExistResult[]>(
+    static async DBCheckUserExists(email: string, query_runner?: QueryRunner): Promise<UserResponseDto.CheckUserExistResult[]> {
+        const rows = await db.query<UserResponseDto.CheckUserExistResult[]>(
             `
             SELECT 
-            u.id, u.name, u.email, u.password, u.level, u.is_verified, u.created_at, u.is_deleted
-            FROM user u
-            WHERE u.email = ?
-            AND u.is_deleted <> 1`,
+                u.id, u.email, u.password_hash, u.group_id, u.status,
+                c.first_name, c.last_name
+            FROM users u
+            LEFT JOIN clients c ON u.id = c.user_id
+            WHERE u.email = ? AND u.status <> 'suspended'
+            `,
             [email],
             query_runner
-        )
+        );
+        return rows;
     }
 
     static async DBGetUserDataById(id: number, query_runner?: QueryRunner): Promise<UserResponseDto.GetUserDataByIdResult[]> {
-        const result = await db.query<UserResponseDto.GetUserDataByIdResult[]>(
-            `SELECT 
-        u.id, u.name, u.email, u.level, u.created_at,
-        GROUP_CONCAT(DISTINCT d.rules_id separator ',') as group_rules
-        FROM user u
-        LEFT JOIN user_group_rules d ON u.level = d.group_id
-        WHERE u.id = ?
-        GROUP BY u.id`,
-            [id],
-            query_runner
-        )
-        return result
-    }
-
-    static async DBGetUserById(id: number, query_runner?: QueryRunner): Promise<UserResponseDto.GetUserByIdResult[]> {
-        const result = await db.query<UserResponseDto.GetUserByIdResult[]>(
+        const rows = await db.query<UserResponseDto.GetUserDataByIdResult[]>(
             `
             SELECT 
-            u.id, u.name, u.email, u.level, u.created_at
-            FROM user u
-            WHERE u.id = ?`,
+                u.id, u.email, u.group_id, c.first_name, c.last_name,
+                GROUP_CONCAT(DISTINCT d.rule_id separator ',') as group_rules
+            FROM users u
+            LEFT JOIN user_group_rules d ON u.group_id = d.group_id
+            LEFT JOIN clients c ON u.id = c.user_id
+            WHERE u.id = ?
+            GROUP BY u.id
+            `,
             [id],
             query_runner
-        )
-
-        return result
+        );
+        return rows;
     }
 
-    static async DBGetUserEmailExist(email: string, query_runner?: QueryRunner): Promise<UserResponseDto.GetUserEmailExistResult[]> {
-        const result = await db.query<UserResponseDto.GetUserEmailExistResult[]>(
-            `
-        SELECT u.email FROM user u WHERE u.email = ?`,
-            [email],
+    static async DBUpdateUserEditProfile(params: { email: string, id: number }, query_runner?: QueryRunner): Promise<ResultSetHeader> {
+        const result = await db.query<ResultSetHeader>(
+            `UPDATE users SET email = ?, updated_at = ? WHERE id = ?`,
+            [moment.utc().format("YYYY-MM-DD HH:mm:ss"), params.email, params.id],
             query_runner
-        )
-
-        return result
+        );
+        return result;
     }
 
-    static async DBUpdateUserEditProfile(params: UserParamsDto.UpdateUserEditProfileParams, query_runner?: QueryRunner) {
-        const result = await db.query<ResultSetHeader>(`UPDATE user SET NAME = ?, email = ? WHERE id = ? `, [params.name, params.email, params.id], query_runner)
-
-        return result
+    static async DBGetUserPasswordById(id: number, query_runner?: QueryRunner): Promise<{ id: number; password_hash: string }[]> {
+        const rows = await db.query<{ id: number; password_hash: string }[]>(
+            `SELECT id, password_hash FROM users WHERE id = ?`,
+            [id],
+            query_runner
+        );
+        return rows;
     }
 
-    static async DBGetUserPasswordById(id: number, query_runner?: QueryRunner): Promise<UserResponseDto.GetUserPasswordByIdResult[]> {
-        const result = await db.query<UserResponseDto.GetUserPasswordByIdResult[]>(`SELECT a.id, a.password FROM user a WHERE id = ?`, [id], query_runner)
-
-        return result
+    static async DBUpdatePassword(passwordHash: string, id: number, query_runner?: QueryRunner): Promise<ResultSetHeader> {
+        const result = await db.query<ResultSetHeader>(
+            `UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?`,
+            [moment.utc().format("YYYY-MM-DD HH:mm:ss"), passwordHash, id],
+            query_runner
+        );
+        return result;
     }
 
-    static async DBUpdatePassword(passEncrypt: string, id: number, query_runner?: QueryRunner) {
-        const result = await db.query<ResultSetHeader>(`UPDATE user SET password = ? WHERE id = ?`, [passEncrypt, id], query_runner)
-        return result
+    static async DBFindUserByToken(token: string): Promise<any[]> {
+        const rows = await db.query<any[]>(
+            `SELECT id, email, status FROM users WHERE email_verification_token = ?`,
+            [token]
+        );
+        return rows;
     }
 
-    static async DBFindUserByToken(token: string) {
-        return await db.query<UserResponseDto.FindUserByTokenResult[]>(`SELECT id, email, is_verified, email_token FROM user WHERE email_token = ?`, [token])
+    static async DBVerifyEmail(email: string, query_runner?: QueryRunner): Promise<ResultSetHeader> {
+        const result = await db.query<ResultSetHeader>(
+            `UPDATE users SET status = 'active', email_verification_token = NULL, updated_at = ? WHERE email = ?`,
+            [moment.utc().format("YYYY-MM-DD HH:mm:ss") ,email],
+            query_runner
+        );
+        return result;
     }
 
-    static async DBVerifyEmail(email: string, query_runner: QueryRunner) {
-        return await db.query<ResultSetHeader>(`UPDATE user SET is_verified = 1, email_token = NULL WHERE email = ?`, [email], query_runner)
+    static DBUpdateUserLastLogin(id: number, query_runner?: QueryRunner): Promise<ResultSetHeader> {
+        {
+            const result = db.query<ResultSetHeader>(
+                `UPDATE users SET last_login = ? WHERE id = ?`, [moment.utc().format("YYYY-MM-DD HH:mm:ss"), id], query_runner);
+
+            return result
+        }
     }
 }

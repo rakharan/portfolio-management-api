@@ -12,8 +12,8 @@ export class CreatePortfolioTable1753769913568 implements MigrationInterface {
                 target_allocation JSON,
                 cash_balance DECIMAL(15, 2) DEFAULT 0.00,
                 total_value DECIMAL(15, 2) DEFAULT 0.00,
-                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
             )
         `);

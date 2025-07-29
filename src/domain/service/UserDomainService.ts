@@ -49,7 +49,7 @@ export default class UserDomainService {
             throw new ApiError("MUST_IN_TRANSACTION")
         }
 
-        const result = await UserRepository.DBGetUserById(id, query_runner)
+        const result = await UserRepository.DBGetUserDataById(id, query_runner)
         if (result.length < 1) {
             throw new ApiError("USER_NOT_FOUND")
         }
@@ -58,7 +58,7 @@ export default class UserDomainService {
     }
 
     static async GetUserEmailExistDomainService(email: string) {
-        return await UserRepository.DBGetUserEmailExist(email)
+        return await UserRepository.DBGetEmailExist(email)
     }
 
     static async UpdateUserEditProfileDomainService(params: UserParamsDto.UpdateUserEditProfileParams, query_runner?: QueryRunner) {
@@ -111,5 +111,17 @@ export default class UserDomainService {
         if (verify.affectedRows < 1) {
             throw new ApiError("FAILED_TO_VERIFY_EMAIL")
         }
+    }
+
+    static async UpdateUserLastLogin(id: number, query_runner?: QueryRunner) {
+        if (!query_runner?.isTransactionActive) {
+            throw new ApiError("MUST_IN_TRANSACTION")
+        }
+
+        const result = await UserRepository.DBUpdateUserLastLogin(id, query_runner)
+        if (result.affectedRows < 1) {
+            throw new ApiError("FAILED_TO_UPDATE_LAST_LOGIN")
+        }
+        return true
     }
 }

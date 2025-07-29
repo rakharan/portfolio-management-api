@@ -1,8 +1,10 @@
-import { RegisterRequest, LoginRequest } from "../request/UserRequest"
+import { LoginRequest } from "../request/UserRequest"
 
-export type RegisterParams = RegisterRequest & {
-    created_at: number
-    email_token: string
+export type RegisterParams = {
+    email_verification_token: string
+    password_hash: string
+    group_id: number 
+    email: string
 }
 
 export type LoginParams = LoginRequest
