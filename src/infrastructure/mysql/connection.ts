@@ -2,7 +2,7 @@ import DotenvFlow from "dotenv-flow"
 import path from "path"
 import { DataSource } from "typeorm"
 
-DotenvFlow.config({ path: path.resolve(__dirname, `../../`) })
+DotenvFlow.config({ path: path.resolve(__dirname, `../../../`) })
 
 export const AppDataSource = new DataSource({
     type: (process.env.DB_IDENTIFIER as "mysql") || "mysql",

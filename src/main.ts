@@ -1,7 +1,7 @@
 import fastify from "fastify"
 import Ajv from "ajv"
 import cors from '@fastify/cors'
-import { AppDataSource } from "./database/mysql"
+import { AppDataSource } from "@infrastructure/mysql/connection"
 
 function ajvFilePlugin(ajv: Ajv) {
     return ajv.addKeyword({
