@@ -14,18 +14,15 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@database/*": ["./database/*"],
-      "@models/*": ["./models/*"],
-      "@routes/*": ["./application/*"],
-      "@controllers/*": ["./controllers/*"],
-      "@routesa/*": ["./routesa/*"],
-      "@services/*": ["./services/*"],
-      "@types/*": ["./types/*"],
-      "@utils/*": ["./utils/*"],
-      "@middleware/*": ["./middleware/*"],
+      "@infrastructure/*": ["./infrastructure/*"],
+      "@domain/*": ["./domain/*"],
+      "@application/*": ["./application/*"],
+      "@adapters/*": ["./adapters/*"],
+      "@helpers/*": ["./helpers/*"],
+      "@cronJobs/*": ["./cronJobs/*"]
     },
     "skipLibCheck": true
   },
-  "include": ["./src/**/*", "src/helpers/Email/template/**/*.handlebars", "migrations/**/*.ts"],
-  "exclude": ["node_modules", "./src/__tests__", "./src/__mocks__"],
+  "include": ["./src/**/*", "migrations/**/*.ts"],
+  "exclude": ["node_modules", "./src/tests"],
  }
