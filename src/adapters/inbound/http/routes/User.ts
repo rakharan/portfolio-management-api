@@ -31,6 +31,26 @@ const routes: RouteOptions[] = [
                 },
             }),
         },
+    },
+    {
+        method: ["PUT"],
+        url: "profile",
+        handler: UserController.UpdateClientProfileService,
+        schema: {
+            tags: ["User"],
+            body: Schema.BaseRequestSchema("Rakha", {
+                first_name: { type: "string", default: "" },
+                last_name: { type: "string", default: "" },
+                phone: { type: "string", default: "" },
+                risk_tolerance: { type: "string", default: "" },
+                investment_experience: { type: "string", default: "" },
+                annual_income: { type: "string", default: "" },
+                net_worth: { type: "string", default: "" },
+                investment_goals: { type: "string", default: "" },
+                date_of_birth: { type: "string", default: "" },
+            }),
+            response: Schema.BaseResponse({ type: "Boolean" }),
+        },
     }
 ]
 

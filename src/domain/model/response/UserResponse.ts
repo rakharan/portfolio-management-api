@@ -1,3 +1,5 @@
+import { InvestmentExperience, RiskTolerance } from "../request/UserRequest"
+
 export type GetEmailExistResult = {
     id: number
 }
@@ -12,11 +14,20 @@ export type GetUserByIdResult = {
 
 export type GetUserDataByIdResult = {
     id: number
-    name: string
+    first_name: string
+    last_name: string
     email: string
-    level?: number
+    group_id?: number
     created_at: number
     group_rules?: string
+    phone?: string
+    date_of_birth?: string
+    risk_tolerance?: RiskTolerance
+    investment_experience?: InvestmentExperience
+    annual_income?: number
+    net_worth?: number
+    investment_goals?: string
+    updated_at?: number
 }
 
 export type UserClaimsResponse = {

@@ -98,18 +98,38 @@ export default class UserRepository {
     static async DBVerifyEmail(email: string, query_runner?: QueryRunner): Promise<ResultSetHeader> {
         const result = await db.query<ResultSetHeader>(
             `UPDATE users SET status = 'active', email_verification_token = NULL, updated_at = ? WHERE email = ?`,
-            [moment.utc().format("YYYY-MM-DD HH:mm:ss") ,email],
+            [moment.utc().format("YYYY-MM-DD HH:mm:ss"), email],
             query_runner
         );
         return result;
     }
 
     static DBUpdateUserLastLogin(id: number, query_runner?: QueryRunner): Promise<ResultSetHeader> {
-        {
-            const result = db.query<ResultSetHeader>(
-                `UPDATE users SET last_login = ? WHERE id = ?`, [moment.utc().format("YYYY-MM-DD HH:mm:ss"), id], query_runner);
+        const result = db.query<ResultSetHeader>(
+            `UPDATE users SET last_login = ? WHERE id = ?`, [moment.utc().format("YYYY-MM-DD HH:mm:ss"), id], query_runner);
 
-            return result
-        }
+        return result
+    }
+
+    static DBUpdateClientData(params: UserParamsDto.UpdateClientParams, query_runner?: QueryRunner): Promise<ResultSetHeader> {
+        const result = db.query<ResultSetHeader>(
+            `UPDATE clients SET first_name = ?, last_name = ?, phone = ?, risk_tolerance = ?, investment_experience = ?, annual_income = ?, net_worth = ?, investment_goals = ?, date_of_birth = ?, updated_at = ? WHERE user_id = ?`,
+            [
+                params.first_name,
+                params.last_name,
+                params.phone,
+                params.risk_tolerance,
+                params.investment_experience,
+                params.annual_income,
+                params.net_worth,
+                params.investment_goals,
+                params.date_of_birth,
+                moment.utc().format("YYYY-MM-DD HH:mm:ss"),
+                params.user_id
+            ],
+            query_runner
+        );
+
+        return result
     }
 }

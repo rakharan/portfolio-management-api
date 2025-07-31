@@ -1,4 +1,5 @@
 import { LoginRequest } from "../request/UserRequest"
+import { UserRequestDto } from "../request"
 
 export type RegisterParams = {
     email_verification_token: string
@@ -25,4 +26,9 @@ export type ChangePasswordParams = {
     id: number
     oldPassword: string
     newPassword: string
+}
+
+
+export type UpdateClientParams = UserRequestDto.UpdateClientRequest & {
+    user_id: number
 }

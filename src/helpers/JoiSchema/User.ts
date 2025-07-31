@@ -6,21 +6,20 @@ export const UserId = Joi.number().min(0).messages({
 })
 
 export const Password = Joi.string()
-.min(12)
-.max(64)
-.pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]+$"))
-.required()
-.messages({
-  "any.required": "Password is required",
-  "string.pattern.base": "Password contains invalid characters",
-  "string.min": "Password must be at least 12 characters long",
-  "string.max": "Password must be no more than 64 characters long",
-});
+    .min(12)
+    .max(64)
+    .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]+$"))
+    .required()
+    .messages({
+        "any.required": "Password is required",
+        "string.pattern.base": "Password contains invalid characters",
+        "string.min": "Password must be at least 12 characters long",
+        "string.max": "Password must be no more than 64 characters long",
+    });
 
 
 export const Name = Joi.string()
     .min(3)
-    .required()
     .max(50)
     .regex(/^[a-zA-Z ]+$/)
     .messages({
@@ -37,8 +36,8 @@ export const Email = Joi.string()
     })
 
 export const Register = Joi.object({
-    first_name: Name,
-    last_name: Name,
+    first_name: Name.required(),
+    last_name: Name.required(),
     email: Email,
     password: Password,
     group_id: Joi.number().valid(3).required().messages({
@@ -70,3 +69,18 @@ export const ChangePassword = Joi.object({
 }).options({ abortEarly: false })
 
 export const VerifyEmail = Joi.string().required()
+
+export const UpdateClientProfile = Joi.object({
+    user_id: UserId.required().messages({
+        "any.required": "user_id is required",
+    }),
+    first_name: Name.optional().allow(null, ""),
+    last_name: Name.optional().allow(null, ""),
+    phone: Joi.string().allow(null, ""),
+    risk_tolerance: Joi.string().valid("conservative", "moderate", "aggressive").allow(null, ""),
+    investment_experience: Joi.string().valid("beginner", "intermediate", "experienced").allow(null, ""),
+    annual_income: Joi.number().allow(null, ""),
+    net_worth: Joi.number().allow(null, ""),
+    investment_goals: Joi.string().allow(null, ""),
+    date_of_birth: Joi.string().allow(null, ""),
+})

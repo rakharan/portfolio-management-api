@@ -124,4 +124,16 @@ export default class UserDomainService {
         }
         return true
     }
+
+    static async UpdateClientDataDomainService(params: UserParamsDto.UpdateClientParams, query_runner?: QueryRunner) {
+        if (!query_runner?.isTransactionActive) {
+            throw new ApiError("MUST_IN_TRANSACTION")
+        }
+
+        const result = await UserRepository.DBUpdateClientData(params, query_runner)
+        if (result.affectedRows < 1) {
+            throw new ApiError("FAILED_TO_UPDATE_CLIENT_DATA")
+        }
+        return true
+    }
 }
