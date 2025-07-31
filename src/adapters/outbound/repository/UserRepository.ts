@@ -29,7 +29,7 @@ export default class UserRepository {
         const rows = await db.query<UserResponseDto.CheckUserExistResult[]>(
             `
             SELECT 
-                u.id, u.email, u.password_hash, u.group_id, u.status,
+                u.id, c.id as client_id, u.email, u.password_hash, u.group_id, u.status,
                 c.first_name, c.last_name
             FROM users u
             LEFT JOIN clients c ON u.id = c.user_id

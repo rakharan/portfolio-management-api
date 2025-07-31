@@ -92,6 +92,10 @@ export default class AuthAppService {
 
             const userClaims = {
                 id: existingUser.id,
+                client_id: existingUser.client_id,
+                first_name: existingUser.first_name,
+                last_name: existingUser.last_name,
+                email: existingUser.email,
                 group_id: existingUser.group_id,
                 permissions: permissions
             };

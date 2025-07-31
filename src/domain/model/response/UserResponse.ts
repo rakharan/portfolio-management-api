@@ -32,6 +32,7 @@ export type GetUserDataByIdResult = {
 
 export type UserClaimsResponse = {
     id: number
+    client_id: number
     group_id: number
     permissions: number[]
 }
@@ -47,6 +48,7 @@ export type GetUserPasswordByIdResult = {
 
 export type CheckUserExistResult = {
     id: number
+    client_id: number
     first_name: string
     last_name: string
     email: string

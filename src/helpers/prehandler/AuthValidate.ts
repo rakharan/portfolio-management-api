@@ -12,6 +12,10 @@ DotenvFlow.config({ path: path.resolve(__dirname, `../../../`) })
 declare module "fastify" {
     interface UserClaims {
         id: number
+        client_id: number
+        first_name: string
+        last_name: string
+        email: string
         group_id: number
         permissions: number[]
     }
@@ -48,6 +52,10 @@ function authorize(data: AuthorizeParams): number {
 
 const checkClaims = Joi.object({
     id: Joi.number().required(),
+    client_id: Joi.number().required(),
+    first_name: Joi.string().required(),
+    last_name: Joi.string().required(),
+    email: Joi.string().required(),
     group_id: Joi.number().required(),
     permissions: Joi.array().items(Joi.number()).required(),
 }).unknown(true)
@@ -56,7 +64,6 @@ export async function AuthValidate(request: FastifyRequest) {
     if (!request.headers?.authorization) throw new UnauthorizedError("PLEASE_LOGIN_FIRST")
 
     const user_claims = await verifyJWT<UserClaimsResponse>(request.headers.authorization, process.env.JWT_SECRET)
-
     await checkClaims.validateAsync(user_claims)
 
     request.user = new User().set(user_claims)
