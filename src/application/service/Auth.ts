@@ -92,10 +92,14 @@ export default class AuthAppService {
 
             const userClaims = {
                 id: existingUser.id,
-                groupId: existingUser.group_id,
+                group_id: existingUser.group_id,
                 permissions: permissions
             };
-            const token = await signJWT(userClaims, process.env.JWT_SECRET, { expiresIn: parseInt(process.env.EXPIRES_IN || "1h") });
+
+            const expiresInHours = process.env.EXPIRES_IN ? parseInt(process.env.EXPIRES_IN) : 1;
+            const expiresIn = expiresInHours * 60 * 60; // convert hours to seconds
+
+            const token = await signJWT(userClaims, process.env.JWT_SECRET, { expiresIn });
 
             const result = {
                 token,

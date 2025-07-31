@@ -19,7 +19,8 @@
       "@application/*": ["./application/*"],
       "@adapters/*": ["./adapters/*"],
       "@helpers/*": ["./helpers/*"],
-      "@cronJobs/*": ["./cronJobs/*"]
+      "@cronJobs/*": ["./cronJobs/*"],
+      "@middleware/*": ["./middleware/*"]
     },
     "skipLibCheck": true
   },

@@ -21,8 +21,8 @@ export type GetUserDataByIdResult = {
 
 export type UserClaimsResponse = {
     id: number
-    level: number
-    authority: number[]
+    group_id: number
+    permissions: number[]
 }
 
 export type GetUserEmailExistResult = {

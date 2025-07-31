@@ -6,27 +6,27 @@ export class User {
     id: number
     name: string
     email: string
-    level: number
-    authority: number[]
+    group_id: number
+    permissions: number[]
 
-    constructor(id = 0, name = "", email = "", level = 0, authority = []) {
+    constructor(id = 0, name = "", email = "", group_id = 0, permissions = []) {
         this.id = id
         this.name = name
         this.email = email
-        this.level = level
-        this.authority = authority
+        this.group_id = group_id
+        this.permissions = permissions
     }
 
     set(params: UserClaimsResponse): this {
-        ({ id: this.id, level: this.level, authority: this.authority } = params)
+        ({ id: this.id, group_id: this.group_id, permissions: this.permissions } = params)
         return this
     }
 
     get() {
         return {
             id: this.id,
-            level: this.level,
-            authority: this.authority,
+            group_id: this.group_id,
+            permissions: this.permissions,
         }
     }
 

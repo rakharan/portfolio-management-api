@@ -46,7 +46,8 @@ export default class UserRepository {
             `
             SELECT 
                 u.id, u.email, u.group_id, c.first_name, c.last_name,
-                GROUP_CONCAT(DISTINCT d.rule_id separator ',') as group_rules
+                GROUP_CONCAT(DISTINCT d.rule_id separator ',') as group_rules,
+                c.phone, c.date_of_birth, c.risk_tolerance, c.investment_experience, c.annual_income, c.net_worth, c.investment_goals, c.created_at, c.updated_at
             FROM users u
             LEFT JOIN user_group_rules d ON u.group_id = d.group_id
             LEFT JOIN clients c ON u.id = c.user_id
