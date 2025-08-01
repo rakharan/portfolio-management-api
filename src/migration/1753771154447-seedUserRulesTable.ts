@@ -5,29 +5,30 @@ export class SeedUserRulesTable1753771154447 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
             INSERT INTO user_rules (id, permission_name) VALUES
-                -- Portfolio Permissions
-                (1, 'portfolio:create'),
-                (2, 'portfolio:view:own'),
-                (3, 'portfolio:view:assigned'), -- For advisors to see their clients' portfolios
-                (4, 'portfolio:view:all'), -- For admins/compliance
-                (5, 'portfolio:update:own'),
-                (6, 'portfolio:update:assigned'),
-                (7, 'portfolio:delete:assigned'),
+                -- 100-199: Portfolio Management
+                (101, 'portfolio:create'),
+                (102, 'portfolio:view:own'),
+                (103, 'portfolio:view:assigned'),
+                (104, 'portfolio:view:all'),
+                (105, 'portfolio:update:own'),
+                (106, 'portfolio:update:assigned'),
+                (107, 'portfolio:delete:assigned'),
 
-                -- Transaction Permissions
-                (8, 'transaction:create:assigned'), -- For advisors to execute trades
-                (9, 'transaction:view:own'),
-                (10, 'transaction:view:assigned'),
-                (11, 'transaction:view:all'),
+                -- 200-299: Transaction Management
+                (201, 'transaction:create:assigned'),
+                (202, 'transaction:view:own'),
+                (203, 'transaction:view:assigned'),
+                (204, 'transaction:view:all'),
 
-                -- User Management Permissions
-                (12, 'admin:manage_users'),
-                (13, 'admin:manage_roles');
+                -- 900-999: System Administration
+                (901, 'admin:manage_users'),
+                (902, 'admin:manage_roles');
         `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DELETE FROM user_rules;`);
+        // You can use a more generic delete or specify the IDs
+        await queryRunner.query(`DELETE FROM user_rules WHERE id >= 100;`);
     }
 
 }
