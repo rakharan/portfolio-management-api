@@ -76,10 +76,10 @@ export default class AuthAppService {
                 throw new BadInputError("WRONG_USERNAME_OR_PASSWORD");
             }
             if (existingUser.status === 'suspended') {
-                throw new BadInputError("Your account is suspended. Please contact support.");
+                throw new BadInputError("YOUR_ACCOUNT_IS_SUSPENDED");
             }
             if (existingUser.status === 'pending_verification') {
-                throw new BadInputError("Please verify your email before logging in.");
+                throw new BadInputError("PLEASE_VERIFY_YOUR_EMAIL");
             }
 
             const isPasswordValid = await checkPassword(password, existingUser.password_hash);

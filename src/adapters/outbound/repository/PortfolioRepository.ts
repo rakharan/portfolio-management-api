@@ -59,7 +59,7 @@ export default class PortfolioRepository {
         );
 
         if (result.length < 1) {
-            throw new Error("Portfolio not found.");
+            throw new Error("PORTFOLIO_NOT_FOUND");
         }
 
         return result[0]

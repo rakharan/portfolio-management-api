@@ -52,7 +52,7 @@ export default class PortfolioAppService {
             // First, check if the portfolio exists and get current data
             const existingPortfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(params.id);
             if (!existingPortfolio) {
-                throw new Error("Portfolio not found.");
+                throw new Error("PORTFOLIO_NOT_FOUND");
             }
 
             // Check permissions (similar to GetPortfolioDetailsByIdService)
@@ -63,11 +63,11 @@ export default class PortfolioAppService {
                 } catch (error) {
                     // Re-throw with more specific error message based on role
                     if (group_id === ADVISOR_LEVEL) {
-                        throw new Error("Portfolio not found or you do not have permission to update this client's portfolio.");
+                        throw new Error("PORTFOLIO_NOT_FOUND_OR_YOU_DO_NOT_HAVE_PERMISSION_TO_UPDATE_THIS_PORTFOLIO");
                     } else if (group_id === CLIENT_LEVEL) {
-                        throw new Error("Portfolio not found or you do not have permission to update this portfolio.");
+                        throw new Error("PORTFOLIO_NOT_FOUND_OR_YOU_DO_NOT_HAVE_PERMISSION_TO_UPDATE_THIS_PORTFOLIO");
                     } else {
-                        throw new Error("Invalid user role.");
+                        throw new Error("INVALID_USER_ROLE");
                     }
                 }
             }
@@ -118,7 +118,7 @@ export default class PortfolioAppService {
             // Super admin can view all portfolios
             const portfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(id);
             if (!portfolio) {
-                throw new Error("Portfolio not found.");
+                throw new Error("PORTFOLIO_NOT_FOUND");
             }
             return portfolio;
         }
@@ -133,7 +133,7 @@ export default class PortfolioAppService {
             // First, get the portfolio to check if it exists and get its client_id
             const portfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(id);
             if (!portfolio) {
-                throw new Error("Portfolio not found.");
+                throw new Error("PORTFOLIO_NOT_FOUND");
             }
 
             // Now check if the portfolio's client has group_id = 3 (is a regular client)
@@ -141,7 +141,7 @@ export default class PortfolioAppService {
             const portfolioCheck = await PortfolioDomainService.CheckPortfolioOwnershipDomain(id, portfolio.client_id, Group.CLIENT);
 
             if (!portfolioCheck) {
-                throw new Error("You do not have permission to view this portfolio.");
+                throw new Error("YOU_DO_NOT_HAVE_PERMISSION_TO_VIEW_THIS_PORTFOLIO");
             }
 
             return portfolio;
@@ -154,20 +154,20 @@ export default class PortfolioAppService {
             const portfolioCheck = await PortfolioDomainService.CheckPortfolioOwnershipDomain(id, client_id, Group.CLIENT);
 
             if (!portfolioCheck) {
-                throw new Error("Portfolio not found or you do not have permission to view this portfolio.");
+                throw new Error("PORTFOLIO_NOT_FOUND_OR_YOU_DO_NOT_HAVE_PERMISSION_TO_VIEW_THIS_PORTFOLIO");
             }
 
             // Get and return the portfolio
             const portfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(id);
             if (!portfolio) {
-                throw new Error("Portfolio not found.");
+                throw new Error("PORTFOLIO_NOT_FOUND");
             }
 
             return portfolio;
 
         } else {
             // Unknown group_id
-            throw new Error("Invalid user role.");
+            throw new Error("INVALID_USER_ROLE");
         }
     }
 }
