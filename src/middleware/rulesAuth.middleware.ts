@@ -9,7 +9,7 @@ const ADMIN_GROUP_ID = 1;
  * @param requiredPermissionId The ID of the permission from the `user_rules` table required to access the endpoint.
  */
 export function authorizationMiddleware(requiredPermissionId: number) {
-    
+
     // This is the actual Fastify preHandler that will be executed
     return async function (request: FastifyRequest, _: FastifyReply) {
         // This middleware must run *after* authMiddleware, so request.user will be available
@@ -17,7 +17,7 @@ export function authorizationMiddleware(requiredPermissionId: number) {
 
         if (!user) {
             // This should not happen if routes are set up correctly, but it's a good safeguard
-            throw new UnauthorizedError("Authentication required.");
+            throw new UnauthorizedError("AUTHENTICATION_REQUIRED");
         }
 
         // Rule 1: The 'Administrator' group can access any endpoint.
@@ -29,7 +29,7 @@ export function authorizationMiddleware(requiredPermissionId: number) {
         const hasPermission = user.permissions.includes(requiredPermissionId);
 
         if (!hasPermission) {
-            throw new UnauthorizedError("You do not have sufficient permissions to perform this action.");
+            throw new UnauthorizedError("YOU_DO_NOT_HAVE_PERMISSION_TO_PERFORM_THIS_ACTION");
         }
     };
 }
