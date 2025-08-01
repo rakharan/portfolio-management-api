@@ -8,6 +8,10 @@ interface UserClaims {
     id: number;
     group_id: number;
     permissions: number[];
+    client_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
 }
 
 // Joi schema to validate the claims after decoding the token

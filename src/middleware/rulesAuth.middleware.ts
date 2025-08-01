@@ -11,7 +11,7 @@ const ADMIN_GROUP_ID = 1;
 export function authorizationMiddleware(requiredPermissionId: number) {
     
     // This is the actual Fastify preHandler that will be executed
-    return async function (request: FastifyRequest, reply: FastifyReply) {
+    return async function (request: FastifyRequest, _: FastifyReply) {
         // This middleware must run *after* authMiddleware, so request.user will be available
         const user = request.user;
 
