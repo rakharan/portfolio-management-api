@@ -38,4 +38,43 @@ export default class PortfolioController {
 
         return { message: true }
     }
+
+    static async UpdatePortfolioController(request: FastifyRequest): Promise<{ message: boolean }> {
+
+        const { cash_balance, name, portfolio_type, target_allocation, total_value, id } = request.body as PortfolioRequestDto.UpdatePortfolioRequest
+        const { client_id, group_id } = request.user
+
+        await PortfolioAppService.UpdatePortfolioService(
+            {
+                id,
+                cash_balance,
+                name,
+                portfolio_type,
+                target_allocation,
+                total_value,
+            },
+            {
+                user_id: request.user.id,
+                action: `Update Portfolio`,
+                ip: (request.headers["x-forwarded-for"] as string) || (request.ip == "::1" ? "127.0.0.1" : request.ip),
+                browser: request.headers["user-agent"],
+                time: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
+            },
+            {
+                client_id,
+                group_id
+            }
+        )
+
+        return { message: true }
+    }
+
+    static async GetPortfolioDetailsByIdController(request: FastifyRequest): Promise<{ message: any }> {
+        const { id } = request.query as { id: number };
+        const { client_id, group_id } = request.user;
+
+        const portfolio = await PortfolioAppService.GetPortfolioDetailsByIdService({ client_id, group_id, id });
+
+        return { message: portfolio }
+    }
 }
