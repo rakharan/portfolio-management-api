@@ -143,7 +143,7 @@ export default class AuthAppService {
 
         const user = await UserDomainService.FindUserByTokenDomain(token);
         if (!user || user.status !== 'pending_verification') {
-            throw new BadInputError("Invalid or expired verification link.");
+            throw new BadInputError("INVALID_OR_EXPIRED_VERIFICATION_TOKEN");
         }
 
         const query_runner = AppDataSource.createQueryRunner();
