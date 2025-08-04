@@ -24,10 +24,10 @@ export class CreateOrderTable1754041756264 implements MigrationInterface {
                 close_price DECIMAL(20, 8) NULL, -- Price when order was closed/filled
                 fees DECIMAL(20, 8) DEFAULT 0, -- Trading fees
                 notes TEXT NULL, -- Additional notes or comments
-                expires_at TIMESTAMP NULL, -- Order expiration time
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                closed_at TIMESTAMP NULL, -- When order was closed/filled
+                expires_at DATETIME NULL, -- Order expiration time
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                closed_at DATETIME NULL, -- When order was closed/filled
                 FOREIGN KEY (portfolio_id) REFERENCES portfolios(id) ON DELETE CASCADE,
                 FOREIGN KEY (asset_id) REFERENCES assets(id),
                 FOREIGN KEY (client_id) REFERENCES clients(id),
