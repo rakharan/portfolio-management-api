@@ -79,7 +79,6 @@ export default class PortfolioAppService {
                 name: params.name || existingPortfolio.name,
                 portfolio_type: params.portfolio_type || existingPortfolio.portfolio_type,
                 target_allocation: params.target_allocation || existingPortfolio.target_allocation,
-                cash_balance: params.cash_balance !== undefined ? params.cash_balance : existingPortfolio.cash_balance,
                 total_value: params.total_value !== undefined ? params.total_value : existingPortfolio.total_value,
             };
 

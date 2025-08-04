@@ -41,13 +41,12 @@ export default class PortfolioController {
 
     static async UpdatePortfolioController(request: FastifyRequest): Promise<{ message: boolean }> {
 
-        const { cash_balance, name, portfolio_type, target_allocation, total_value, id } = request.body as PortfolioRequestDto.UpdatePortfolioRequest
+        const { name, portfolio_type, target_allocation, total_value, id } = request.body as PortfolioRequestDto.UpdatePortfolioRequest
         const { client_id, group_id } = request.user
 
         await PortfolioAppService.UpdatePortfolioService(
             {
                 id,
-                cash_balance,
                 name,
                 portfolio_type,
                 target_allocation,

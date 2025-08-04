@@ -33,15 +33,15 @@ export default class PortfolioRepository {
     }
 
     static async DBUpdatePortfolio(params: PortfolioParamsDto.UpdatePortfolioParams, query_runner: QueryRunner) {
-        const { id, name, portfolio_type, target_allocation, cash_balance, total_value } = params;
+        const { id, name, portfolio_type, target_allocation, total_value } = params;
 
         return await db.query(
             `
             UPDATE portfolios
-            SET name = ?, portfolio_type = ?, target_allocation = ?, cash_balance = ?, total_value = ?, updated_at = ?
+            SET name = ?, portfolio_type = ?, target_allocation = ?, total_value = ?, updated_at = ?
             WHERE id = ?
             `,
-            [name, portfolio_type, target_allocation, cash_balance, total_value, moment.utc().format("YYYY-MM-DD HH:mm:ss"), id],
+            [name, portfolio_type, target_allocation, total_value, moment.utc().format("YYYY-MM-DD HH:mm:ss"), id],
             query_runner
         );
     }

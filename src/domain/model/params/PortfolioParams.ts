@@ -11,7 +11,6 @@ export type UpdatePortfolioParams = {
     name: string
     portfolio_type: string
     target_allocation: string
-    cash_balance: number
     total_value: number
 }
 
