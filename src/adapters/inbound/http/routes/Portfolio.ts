@@ -98,7 +98,7 @@ const routes: RouteOptions[] = [
     },
 ]
 
-export default async function UserRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {
+export default async function PortfolioRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {
     fastify.addHook("preValidation", AuthValidate)
     for (const route of routes) {
         fastify.route({ ...route, config: options })
