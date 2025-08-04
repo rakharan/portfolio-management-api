@@ -8,7 +8,7 @@ export default class AssetAppService {
 
             return await AssetDomainService.GetAssetByIdDomain(asset_id);
         } catch (error) {
-            throw new Error("ASSET_NOT_FOUND");
+            throw new Error(error);
         }
     }
 }

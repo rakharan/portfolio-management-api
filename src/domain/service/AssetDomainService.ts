@@ -10,10 +10,16 @@ export default class AssetDomainService {
     }
 
     static async GetAssetByIdDomain(asset_id: number, query_runner?: any) {
-        if (!query_runner?.isTransactionActive) {
+        if (query_runner && !query_runner.isTransactionActive) {
             throw new Error("MUST_IN_TRANSACTION");
         }
 
-        return await AssetRepository.DBGetAssetById(asset_id, query_runner);
+        const asset =  await AssetRepository.DBGetAssetById(asset_id, query_runner);
+
+        if (!asset) {
+            throw new Error("ASSET_NOT_FOUND");
+        }
+
+        return asset
     }
 }

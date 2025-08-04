@@ -26,10 +26,6 @@ export default class AssetRepository {
             query_runner
         );
 
-        if (rows.length === 0) {
-            throw new Error("ASSET_NOT_FOUND");
-        }
-
-        return rows
+        return rows[0]
     }
 }
