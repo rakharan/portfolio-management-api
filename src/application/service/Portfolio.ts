@@ -170,4 +170,36 @@ export default class PortfolioAppService {
             throw new Error("INVALID_USER_ROLE");
         }
     }
+
+    static async UpdatePortfolioCashBalanceService(params: PortfolioParamsDto.UpdatePortfolioCashBalanceParams, logData: LogParamsDto.CreateLogParams): Promise<boolean> {
+        const query_runner = AppDataSource.createQueryRunner();
+        await query_runner.connect();
+        await query_runner.startTransaction();
+        try {
+
+            // Check if the portfolio exists
+            const existingPortfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(params.id);
+            if (!existingPortfolio) {
+                throw new Error("PORTFOLIO_NOT_FOUND");
+            }
+
+            // Check if the user has permission to update the cash balance
+            await PortfolioDomainService.CheckPortfolioOwnershipDomain(params.id, params.client_id, params.group_id);
+
+            // Update the cash balance
+            await PortfolioDomainService.UpdatePortfolioCashBalanceDomain(params.id, params.cash_balance, query_runner);
+            
+            // Log the cash balance update action
+            await LogDomainService.CreateLogDomain({ ...logData, user_id: logData.user_id }, query_runner);
+
+            await query_runner.commitTransaction();
+            query_runner.release();
+
+            return true;
+        } catch (error) {
+            await query_runner.rollbackTransaction();
+            query_runner.release();
+            throw error;
+        }
+    }
 }

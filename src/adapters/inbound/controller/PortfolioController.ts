@@ -77,4 +77,27 @@ export default class PortfolioController {
 
         return { message: portfolio }
     }
+
+    static async UpdatePortfolioCashBalanceController(request: FastifyRequest): Promise<{ message: boolean }> {
+        const { id, cash_balance } = request.body as PortfolioRequestDto.UpdatePortfolioCashBalanceRequest;
+        const { client_id, group_id } = request.user;
+
+        await PortfolioAppService.UpdatePortfolioCashBalanceService(
+            {
+                cash_balance,
+                client_id,
+                group_id,
+                id
+            },
+            {
+                user_id: request.user.id,
+                action: `Update Portfolio Cash Balance`,
+                ip: (request.headers["x-forwarded-for"] as string) || (request.ip == "::1" ? "127.0.0.1" : request.ip),
+                browser: request.headers["user-agent"],
+                time: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
+            },
+        )
+
+        return { message: true }
+    }
 }

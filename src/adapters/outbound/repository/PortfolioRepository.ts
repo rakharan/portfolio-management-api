@@ -99,4 +99,16 @@ export default class PortfolioRepository {
 
         return result[0].count > 0;
     }
+
+    static async DBUpdatePortfolioCashBalance(id: number, cash_balance: number, query_runner: QueryRunner) {
+        return await db.query(
+            `
+            UPDATE portfolios
+            SET cash_balance = ?, updated_at = ?
+            WHERE id = ?
+            `,
+            [cash_balance, moment.utc().format("YYYY-MM-DD HH:mm:ss"), id],
+            query_runner
+        );
+    }
 }

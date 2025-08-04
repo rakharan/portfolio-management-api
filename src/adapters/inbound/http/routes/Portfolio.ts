@@ -88,8 +88,20 @@ const routes: RouteOptions[] = [
         //     }),
         //     response: Schema.BaseResponse({ type: "Boolean" }),
         // },
-    }
-
+    },
+    {
+        method: ["PUT"],
+        url: "/cash-balance",
+        handler: PortfolioController.UpdatePortfolioCashBalanceController,
+        schema: {
+            tags: ["User"],
+            body: Schema.BaseRequestSchema("Rakha", {
+                id: { type: "number", default: "" },
+                cash_balance: { type: "number", default: "" }
+            }),
+            response: Schema.BaseResponse({ type: "Boolean" }),
+        },
+    },
 ]
 
 export default async function UserRoute(fastify: FastifyInstance, options: FastifyPluginOptions) {

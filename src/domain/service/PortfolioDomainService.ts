@@ -56,4 +56,16 @@ export default class PortfolioDomainService {
         }
         return true;
     }
+
+    static async UpdatePortfolioCashBalanceDomain(id: number, cash_balance: number, query_runner?: QueryRunner): Promise<void> {
+        if (query_runner && !query_runner.isTransactionActive) {
+            throw new Error("MUST_BE_IN_TRANSACTION_TO_UPDATE_CASH_BALANCE");
+        }
+
+        const result = await PortfolioRepository.DBUpdatePortfolioCashBalance(id, cash_balance, query_runner);
+
+        if (result.affectedRows < 1) {
+            throw new Error("FAILED_TO_UPDATE_CASH_BALANCE");
+        }
+    }
 }

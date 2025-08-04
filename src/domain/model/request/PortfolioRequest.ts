@@ -11,3 +11,8 @@ export type CreatePortfolioRequest = {
 export type UpdatePortfolioRequest = CreatePortfolioRequest & {
     id: number
 }
+
+export type UpdatePortfolioCashBalanceRequest = {
+    id: number
+    cash_balance: number
+}

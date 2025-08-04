@@ -1,4 +1,4 @@
-import { CreatePortfolioRequest } from "../request/PortfolioRequest";
+import { CreatePortfolioRequest, UpdatePortfolioCashBalanceRequest } from "../request/PortfolioRequest";
 
 export type CreatePortfolioParams = CreatePortfolioRequest & {
     client_id: number
@@ -6,11 +6,16 @@ export type CreatePortfolioParams = CreatePortfolioRequest & {
     created_at: string
 }
 
-export type UpdatePortfolioParams =  {
+export type UpdatePortfolioParams = {
     id: number
     name: string
     portfolio_type: string
     target_allocation: string
     cash_balance: number
     total_value: number
+}
+
+export type UpdatePortfolioCashBalanceParams = UpdatePortfolioCashBalanceRequest & {
+    group_id: number
+    client_id: number
 }
