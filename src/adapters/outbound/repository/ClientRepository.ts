@@ -18,7 +18,7 @@ export default class ClientRepository {
      * @param query_runner The active database transaction runner.
      */
     static async DBCreateClient(client: ClientCreationParams, query_runner: QueryRunner): Promise<ResultSetHeader> {
-        const result = await db.query<ResultSetHeader>(
+        return await db.query<ResultSetHeader>(
             `
             INSERT INTO clients (user_id, first_name, last_name) 
             VALUES (?, ?, ?)
@@ -26,7 +26,6 @@ export default class ClientRepository {
             [client.user_id, client.first_name, client.last_name],
             query_runner
         );
-        return result;
     }
 
     /**

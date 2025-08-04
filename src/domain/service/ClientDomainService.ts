@@ -15,11 +15,14 @@ export default class ClientDomainService {
      * @param query_runner The active database transaction runner.
      */
     static async CreateClientDomain(clientData: ClientCreationParams, query_runner: QueryRunner) {
-        // Here you could add domain-specific validation if needed.
-        // For example: check if a client with similar details already exists.
+        if (!query_runner.isTransactionActive) {
+            throw new Error("MUST_IN_TRANSACTION");
+        }
 
-        // Calls the repository to perform the database insertion.
-        return ClientRepository.DBCreateClient(clientData, query_runner);
+        const createClient = await ClientRepository.DBCreateClient(clientData, query_runner);
+        if (createClient.affectedRows < 1) {
+            throw new Error("FAILED_TO_CREATE_CLIENT");
+        }
     }
 
     /**

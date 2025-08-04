@@ -3,6 +3,7 @@ import { PortfolioParamsDto } from "@domain/model/params";
 import { AppDataSource } from "@infrastructure/mysql/connection";
 import moment from "moment";
 import { QueryRunner } from "typeorm";
+import { ResultSetHeader } from "mysql2"
 
 const db = AppDataSource;
 
@@ -19,7 +20,7 @@ export default class PortfolioRepository {
         );
     }
 
-    static async DBCreatePortfolio(params: PortfolioParamsDto.CreatePortfolioParams, query_runner: QueryRunner) {
+    static async DBCreatePortfolio(params: PortfolioParamsDto.CreatePortfolioParams, query_runner: QueryRunner): Promise<ResultSetHeader> {
         const { client_id, name, portfolio_type, target_allocation, cash_balance, total_value, created_at, updated_at } = params;
 
         return await db.query(
@@ -32,7 +33,7 @@ export default class PortfolioRepository {
         );
     }
 
-    static async DBUpdatePortfolio(params: PortfolioParamsDto.UpdatePortfolioParams, query_runner: QueryRunner) {
+    static async DBUpdatePortfolio(params: PortfolioParamsDto.UpdatePortfolioParams, query_runner: QueryRunner): Promise<ResultSetHeader> {
         const { id, name, portfolio_type, target_allocation, total_value } = params;
 
         return await db.query(
@@ -100,7 +101,7 @@ export default class PortfolioRepository {
         return result[0].count > 0;
     }
 
-    static async DBUpdatePortfolioCashBalance(id: number, cash_balance: number, query_runner: QueryRunner) {
+    static async DBUpdatePortfolioCashBalance(id: number, cash_balance: number, query_runner: QueryRunner): Promise<ResultSetHeader> {
         return await db.query(
             `
             UPDATE portfolios

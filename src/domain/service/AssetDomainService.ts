@@ -6,7 +6,11 @@ export default class AssetDomainService {
             throw new Error("MUST_IN_TRANSACTION");
         }
 
-        return await AssetRepository.DBCreateAsset(asset, query_runner);
+        const createAsset =  await AssetRepository.DBCreateAsset(asset, query_runner);
+
+        if (createAsset.affectedRows < 1) {
+            throw new Error("FAILED_TO_CREATE_ASSET");
+        }
     }
 
     static async GetAssetByIdDomain(asset_id: number, query_runner?: any) {
