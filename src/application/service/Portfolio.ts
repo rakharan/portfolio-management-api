@@ -50,7 +50,7 @@ export default class PortfolioAppService {
 
         try {
             // First, check if the portfolio exists and get current data
-            const existingPortfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(params.id);
+            const existingPortfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(params.id, query_runner);
             if (!existingPortfolio) {
                 throw new Error("PORTFOLIO_NOT_FOUND");
             }
@@ -59,7 +59,7 @@ export default class PortfolioAppService {
             if (group_id !== SUPER_ADMIN_LEVEL) {
                 // For non-super admin users, check ownership using the domain service
                 try {
-                    await PortfolioDomainService.CheckPortfolioOwnershipDomain(params.id, client_id, group_id);
+                    await PortfolioDomainService.CheckPortfolioOwnershipDomain(params.id, client_id, group_id, query_runner);
                 } catch (error) {
                     // Re-throw with more specific error message based on role
                     if (group_id === ADVISOR_LEVEL) {
@@ -177,13 +177,13 @@ export default class PortfolioAppService {
         try {
 
             // Check if the portfolio exists
-            const existingPortfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(params.id);
+            const existingPortfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(params.id, query_runner);
             if (!existingPortfolio) {
                 throw new Error("PORTFOLIO_NOT_FOUND");
             }
 
             // Check if the user has permission to update the cash balance
-            await PortfolioDomainService.CheckPortfolioOwnershipDomain(params.id, params.client_id, params.group_id);
+            await PortfolioDomainService.CheckPortfolioOwnershipDomain(params.id, params.client_id, params.group_id, query_runner);
 
             // Update the cash balance
             await PortfolioDomainService.UpdatePortfolioCashBalanceDomain(params.id, params.cash_balance, query_runner);
