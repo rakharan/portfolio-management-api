@@ -21,6 +21,8 @@ export default class OrderAppService {
         await query_runner.connect();
         await query_runner.startTransaction();
 
+        const { asset_id, client_id, group_id, order_type, portfolio_id, quantity, side } = orderRequest
+
         try {
             // STEP 1: VALIDATE INPUT
             // ===============================================
@@ -28,12 +30,12 @@ export default class OrderAppService {
 
             // STEP 2: FETCH & VALIDATE CORE ENTITIES
             // ===============================================
-            const asset = await AssetDomainService.GetAssetByIdDomain(orderRequest.asset_id, query_runner);
+            const asset = await AssetDomainService.GetAssetByIdDomain(asset_id, query_runner);
             if (!asset || !asset.is_active || asset.status !== 'ACTIVE') {
                 throw new Error("ASSET_NOT_FOUND_OR_NOT_TRADEABLE");
             }
 
-            const portfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(orderRequest.portfolio_id, query_runner);
+            const portfolio = await PortfolioDomainService.GetPortfolioDetailsByIdDomain(portfolio_id, query_runner);
             if (!portfolio) {
                 throw new Error("PORTFOLIO_NOT_FOUND");
             }
@@ -41,7 +43,7 @@ export default class OrderAppService {
             // STEP 3: AUTHORIZATION CHECK
             // ===============================================
             const isOwner = await PortfolioDomainService.CheckPortfolioOwnershipDomain(
-                orderRequest.portfolio_id, orderRequest.client_id, orderRequest.group_id, query_runner
+                portfolio_id, client_id, group_id, query_runner
             );
             if (!isOwner) {
                 throw new Error("FORBIDDEN_PORTFOLIO_ACCESS");
@@ -51,9 +53,9 @@ export default class OrderAppService {
             // ===============================================
             // These checks ensure the order is valid before it's even considered for submission.
             const orderPrice = await this.validateAndGetPrice(orderRequest);
-            const orderValue = orderPrice * orderRequest.quantity;
+            const orderValue = orderPrice * quantity;
 
-            if (orderRequest.side === 'BUY') {
+            if (side === 'BUY') {
                 await this.validateAndReserveFunds(orderRequest, portfolio, orderValue, query_runner);
             } else { // 'SELL'
                 await this.validateAndReserveAssets(orderRequest, query_runner);
@@ -61,7 +63,7 @@ export default class OrderAppService {
 
             // Since it's late afternoon in Jakarta, US markets are closed. This check is crucial.
             const isTradingHours = await this.checkTradingHours();
-            if (!isTradingHours && orderRequest.order_type === 'MARKET') {
+            if (!isTradingHours && order_type === 'MARKET') {
                 // In a real system, you might queue the order. For now, we reject it.
                 throw new Error("MARKET_CLOSED_FOR_MARKET_ORDERS");
             }
