@@ -72,11 +72,17 @@ export default class OrderAppService {
 
             // STEP 5: CREATE THE ORDER
             // ===============================================
-            // All checks passed. Now we create the order with a 'SUBMITTED' status.
+            // All checks passed. Now we create the order with a 'PENDING' status and default execution fields.
             const orderToCreate = {
                 ...orderRequest,
                 price: orderPrice,
-                status: 'SUBMITTED' as OrderStatus,
+                order_value: orderValue,
+                status: 'PENDING' as OrderStatus,
+                filled_quantity: 0,
+                average_fill_price: null,
+                close_price: null,
+                fees: 0,
+                closed_at: null,
             };
             const createdOrder = await OrderDomainService.CreateOrderDomain(orderToCreate, query_runner);
 

@@ -8,11 +8,11 @@ export type CreateOrderRequest = {
     side: OrderSide
     order_type: OrderType
     quantity: number
-    price: number
-    stop_loss: number
-    take_profit: number
-    order_value: number
-    notes: string
-    expires_at: string
-    broker_order_id: number
+    price?: number
+    stop_loss?: number
+    take_profit?: number
+    order_value?: number
+    notes?: string
+    expires_at?: string
+    broker_order_id?: string
 }

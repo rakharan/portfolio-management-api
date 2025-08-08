@@ -1,8 +1,6 @@
-import 'tsconfig-paths/register';
 import Fastify from 'fastify';
 import { describe, it, expect, vi } from 'vitest';
-import OrderRoute from '@adapters/inbound/http/routes/Order';
-import OrderAppService from '@application/service/Order';
+
 
 vi.mock('@helpers/prehandler/AuthValidate', () => ({
   AuthValidate: vi.fn(async (request: any) => {
@@ -15,10 +13,13 @@ vi.mock('@application/service/Order', () => ({
     CreateOrderApp: vi.fn().mockResolvedValue({
       message: 'Order submitted successfully for execution.',
       order_id: 1,
-      status: 'SUBMITTED'
+      status: 'PENDING'
     })
   }
 }));
+
+import OrderRoute from '@adapters/inbound/http/routes/Order';
+import OrderAppService from '@application/service/Order';
 
 describe('Order Route', () => {
   it('should create an order successfully', async () => {
@@ -32,10 +33,16 @@ describe('Order Route', () => {
       payload: {
         portfolio_id: 1,
         asset_id: 1,
-        side: 'BUY',
-        order_type: 'MARKET',
+        side: 'buy',
+        order_type: 'limit',
         quantity: 10,
-        broker_order_id: 99
+        price: 100,
+        stop_loss: 90,
+        take_profit: 110,
+        order_value: 1000,
+        notes: 'test',
+        expires_at: '2025-12-31',
+        broker_order_id: 'BRK-99'
       }
     });
 
@@ -44,9 +51,27 @@ describe('Order Route', () => {
       message: {
         message: 'Order submitted successfully for execution.',
         order_id: 1,
-        status: 'SUBMITTED'
+        status: 'PENDING'
       }
     });
     expect(OrderAppService.CreateOrderApp).toHaveBeenCalledOnce();
+    const callArgs = (OrderAppService.CreateOrderApp as any).mock.calls[0][0];
+    expect(callArgs).toMatchObject({
+      portfolio_id: 1,
+      asset_id: 1,
+      side: 'BUY',
+      order_type: 'LIMIT',
+      quantity: 10,
+      price: 100,
+      stop_loss: 90,
+      take_profit: 110,
+      order_value: 1000,
+      notes: 'test',
+      expires_at: '2025-12-31',
+      broker_order_id: 'BRK-99',
+      client_id: 1,
+      group_id: 1,
+      status: 'PENDING',
+    });
   });
 });

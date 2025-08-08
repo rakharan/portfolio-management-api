@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const CreateOrder = Joi.object({
-// portfolio_id, asset_id, side, order_type, quantity, price, broker_order_id, optional fields
+// includes all possible order fields as defined in the orders table
     portfolio_id: Joi.number().min(1).required().messages({
         "number.base": "portfolio_id must be a number",
         "number.min": "portfolio_id must be greater than or equal to 1",
@@ -27,6 +27,15 @@ export const CreateOrder = Joi.object({
         "number.min": "quantity must be greater than or equal to 0",
         "any.required": "quantity is required",
     }),
+    client_id: Joi.number().min(1).required().messages({
+        "number.base": "client_id must be a number",
+        "number.min": "client_id must be greater than or equal to 1",
+        "any.required": "client_id is required",
+    }),
+    group_id: Joi.number().min(1).allow(null).optional().messages({
+        "number.base": "group_id must be a number",
+        "number.min": "group_id must be greater than or equal to 1",
+    }),
     price: Joi.number().min(0).optional().messages({
         "number.base": "price must be a number",
         "number.min": "price must be greater than or equal to 0",
@@ -49,9 +58,42 @@ export const CreateOrder = Joi.object({
     expires_at: Joi.string().allow('').optional().messages({
         "string.base": "expires_at must be a string",
     }),
-    broker_order_id: Joi.number().min(0).required().messages({
-        "number.base": "broker_order_id must be a number",
-        "number.min": "broker_order_id must be greater than or equal to 0",
-        "any.required": "broker_order_id is required",
+    broker_order_id: Joi.string().optional().messages({
+        "string.base": "broker_order_id must be a string",
+    }),
+    filled_quantity: Joi.number().min(0).optional().messages({
+        "number.base": "filled_quantity must be a number",
+        "number.min": "filled_quantity must be greater than or equal to 0",
+    }),
+    average_fill_price: Joi.number().min(0).optional().messages({
+        "number.base": "average_fill_price must be a number",
+        "number.min": "average_fill_price must be greater than or equal to 0",
+    }),
+    close_price: Joi.number().min(0).optional().messages({
+        "number.base": "close_price must be a number",
+        "number.min": "close_price must be greater than or equal to 0",
+    }),
+    fees: Joi.number().min(0).optional().messages({
+        "number.base": "fees must be a number",
+        "number.min": "fees must be greater than or equal to 0",
+    }),
+    closed_at: Joi.string().allow('').optional().messages({
+        "string.base": "closed_at must be a string",
+    }),
+    status: Joi.string()
+        .valid('PENDING','OPEN','PARTIAL_FILLED','FILLED','CANCELLED','REJECTED','EXPIRED')
+        .required()
+        .messages({
+            "string.base": "status must be a string",
+            "any.only": "status must be a valid order status",
+            "any.required": "status is required",
+        }),
+    created_at: Joi.string().required().messages({
+        "string.base": "created_at must be a string",
+        "any.required": "created_at is required",
+    }),
+    updated_at: Joi.string().required().messages({
+        "string.base": "updated_at must be a string",
+        "any.required": "updated_at is required",
     }),
 })
