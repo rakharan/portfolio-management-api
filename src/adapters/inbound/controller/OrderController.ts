@@ -9,7 +9,8 @@ export default class OrderController {
         const order = await OrderAppService.CreateOrderApp(
             {
                 ...createOrderParams,
-                status: "OPEN",
+                side: createOrderParams.side?.toUpperCase(),
+                order_type: createOrderParams.order_type?.toUpperCase(),
                 created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
                 updated_at: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
                 client_id: request.user.client_id,
