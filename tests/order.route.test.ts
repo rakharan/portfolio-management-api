@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import { describe, it, expect, vi } from 'vitest';
 
+
 vi.mock('@helpers/prehandler/AuthValidate', () => ({
   AuthValidate: vi.fn(async (request: any) => {
     request.user = { id: 1, client_id: 1, group_id: 1 };

@@ -33,6 +33,9 @@ export type GetUserDataByIdResult = {
 export type UserClaimsResponse = {
     id: number
     client_id: number
+    first_name: string
+    last_name: string
+    email: string
     group_id: number
     permissions: number[]
 }
