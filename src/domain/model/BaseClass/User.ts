@@ -21,7 +21,15 @@ export class User {
     }
 
     set(params: UserClaimsResponse): this {
-        ({ id: this.id, group_id: this.group_id, permissions: this.permissions, client_id: this.client_id } = params)
+        ({
+            id: this.id,
+            group_id: this.group_id,
+            permissions: this.permissions,
+            client_id: this.client_id,
+            first_name: this.first_name,
+            last_name: this.last_name,
+            email: this.email,
+        } = params)
         return this
     }
 
