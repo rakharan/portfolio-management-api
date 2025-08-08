@@ -1,7 +1,5 @@
 import Fastify from 'fastify';
 import { describe, it, expect, vi } from 'vitest';
-import OrderRoute from '@adapters/inbound/http/routes/Order';
-import OrderAppService from '@application/service/Order';
 
 vi.mock('@helpers/prehandler/AuthValidate', () => ({
   AuthValidate: vi.fn(async (request: any) => {
@@ -19,6 +17,9 @@ vi.mock('@application/service/Order', () => ({
   }
 }));
 
+import OrderRoute from '@adapters/inbound/http/routes/Order';
+import OrderAppService from '@application/service/Order';
+
 describe('Order Route', () => {
   it('should create an order successfully', async () => {
     const app = Fastify();
@@ -32,8 +33,9 @@ describe('Order Route', () => {
         portfolio_id: 1,
         asset_id: 1,
         side: 'BUY',
-        order_type: 'MARKET',
+        order_type: 'LIMIT',
         quantity: 10,
+        price: 100,
         broker_order_id: 99
       }
     });
