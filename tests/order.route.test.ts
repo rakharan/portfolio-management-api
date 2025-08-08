@@ -32,10 +32,15 @@ describe('Order Route', () => {
       payload: {
         portfolio_id: 1,
         asset_id: 1,
-        side: 'BUY',
-        order_type: 'LIMIT',
+        side: 'buy',
+        order_type: 'limit',
         quantity: 10,
         price: 100,
+        stop_loss: 90,
+        take_profit: 110,
+        order_value: 1000,
+        notes: 'test',
+        expires_at: '2025-12-31',
         broker_order_id: 99
       }
     });
@@ -49,5 +54,22 @@ describe('Order Route', () => {
       }
     });
     expect(OrderAppService.CreateOrderApp).toHaveBeenCalledOnce();
+    const callArgs = (OrderAppService.CreateOrderApp as any).mock.calls[0][0];
+    expect(callArgs).toMatchObject({
+      portfolio_id: 1,
+      asset_id: 1,
+      side: 'BUY',
+      order_type: 'LIMIT',
+      quantity: 10,
+      price: 100,
+      stop_loss: 90,
+      take_profit: 110,
+      order_value: 1000,
+      notes: 'test',
+      expires_at: '2025-12-31',
+      broker_order_id: 99,
+      client_id: 1,
+      group_id: 1,
+    });
   });
 });

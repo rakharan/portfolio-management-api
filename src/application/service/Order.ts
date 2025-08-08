@@ -76,7 +76,13 @@ export default class OrderAppService {
             const orderToCreate = {
                 ...orderRequest,
                 price: orderPrice,
+                order_value: orderValue,
                 status: 'SUBMITTED' as OrderStatus,
+                filled_quantity: orderRequest.filled_quantity ?? 0,
+                average_fill_price: orderRequest.average_fill_price ?? null,
+                close_price: orderRequest.close_price ?? null,
+                fees: orderRequest.fees ?? 0,
+                closed_at: orderRequest.closed_at ?? null,
             };
             const createdOrder = await OrderDomainService.CreateOrderDomain(orderToCreate, query_runner);
 
