@@ -9,12 +9,13 @@ export default class OrderController {
         const order = await OrderAppService.CreateOrderApp(
             {
                 ...createOrderParams,
-                side: createOrderParams.side?.toUpperCase(),
-                order_type: createOrderParams.order_type?.toUpperCase(),
+                side: createOrderParams.side?.toUpperCase() as 'BUY' | 'SELL',
+                order_type: createOrderParams.order_type?.toUpperCase() as 'MARKET' | 'LIMIT' | 'STOP' | 'STOP_LIMIT',
                 created_at: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
                 updated_at: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
                 client_id: request.user.client_id,
                 group_id: request.user.group_id,
+                status: 'PENDING',
             },
             {
                 user_id: request.user.id,

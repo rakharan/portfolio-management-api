@@ -12,7 +12,7 @@ vi.mock('@application/service/Order', () => ({
     CreateOrderApp: vi.fn().mockResolvedValue({
       message: 'Order submitted successfully for execution.',
       order_id: 1,
-      status: 'SUBMITTED'
+      status: 'PENDING'
     })
   }
 }));
@@ -41,7 +41,7 @@ describe('Order Route', () => {
         order_value: 1000,
         notes: 'test',
         expires_at: '2025-12-31',
-        broker_order_id: 99
+        broker_order_id: 'BRK-99'
       }
     });
 
@@ -50,7 +50,7 @@ describe('Order Route', () => {
       message: {
         message: 'Order submitted successfully for execution.',
         order_id: 1,
-        status: 'SUBMITTED'
+        status: 'PENDING'
       }
     });
     expect(OrderAppService.CreateOrderApp).toHaveBeenCalledOnce();
@@ -67,9 +67,10 @@ describe('Order Route', () => {
       order_value: 1000,
       notes: 'test',
       expires_at: '2025-12-31',
-      broker_order_id: 99,
+      broker_order_id: 'BRK-99',
       client_id: 1,
       group_id: 1,
+      status: 'PENDING',
     });
   });
 });

@@ -22,12 +22,7 @@ const routes: RouteOptions[] = [
                 order_value: { type: "number" },
                 notes: { type: "string" },
                 expires_at: { type: "string" },
-                broker_order_id: { type: "number" },
-                filled_quantity: { type: "number" },
-                average_fill_price: { type: "number" },
-                close_price: { type: "number" },
-                fees: { type: "number" },
-                closed_at: { type: "string" },
+                broker_order_id: { type: "string" },
             }),
             response: Schema.BaseResponse({
                 type: "Object",

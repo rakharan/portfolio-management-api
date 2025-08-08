@@ -6,4 +6,9 @@ export type CreateOrderParams = CreateOrderRequest & {
     created_at: string
     updated_at: string
     status: OrderStatus
+    filled_quantity?: number
+    average_fill_price?: number | null
+    close_price?: number | null
+    fees?: number
+    closed_at?: string | null
 }
