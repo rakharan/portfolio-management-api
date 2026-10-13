@@ -1,7 +1,7 @@
 import { OrderParamsDto } from "@domain/model/params";
 import { OrderStatus } from "@domain/model/request/OrderRequest";
 import { AppDataSource } from "@infrastructure/mysql/connection";
-import moment from "moment";
+import moment from "moment"
 import { ResultSetHeader } from "mysql2"
 
 export default class OrderRepository {
@@ -13,9 +13,39 @@ export default class OrderRepository {
     }
 
     static async DBCreateOrder(order: OrderParamsDto.CreateOrderParams, query_runner?: any): Promise<ResultSetHeader> {
+        const sql = `INSERT INTO orders (
+                portfolio_id, asset_id, client_id, group_id, side, order_type,
+                quantity, price, stop_loss, take_profit, status, order_value,
+                broker_order_id, filled_quantity, average_fill_price, close_price, fees,
+                notes, expires_at, created_at, updated_at, closed_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
         return await this.db.query(
-            `INSERT INTO orders (portfolio_id, asset_id, side, order_type, quantity, price, stop_loss, take_profit, notes, status, broker_order_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [order.portfolio_id, order.asset_id, order.side, order.order_type, order.quantity, order.price, order.stop_loss, order.take_profit, order.notes, order.status, order.broker_order_id, moment.utc().format("YYYY-MM-DD HH::mm:ss"), moment.utc().format("YYYY-MM-DD HH::mm:ss")],
+            sql,
+            [
+                order.portfolio_id,
+                order.asset_id,
+                order.client_id,
+                order.group_id ?? null,
+                order.side,
+                order.order_type,
+                order.quantity,
+                order.price ?? null,
+                order.stop_loss ?? null,
+                order.take_profit ?? null,
+                order.status,
+                order.order_value ?? null,
+                order.broker_order_id ?? null,
+                order.filled_quantity ?? 0,
+                order.average_fill_price ?? null,
+                order.close_price ?? null,
+                order.fees ?? 0,
+                order.notes ?? null,
+                order.expires_at ?? null,
+                order.created_at,
+                order.updated_at,
+                order.closed_at ?? null,
+            ],
             query_runner
         );
     }
